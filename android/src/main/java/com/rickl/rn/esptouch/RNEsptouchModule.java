@@ -130,25 +130,26 @@ public class RNEsptouchModule extends ReactContextBaseJavaModule implements Life
     @ReactMethod
     public void initESPTouch() {
         // issue#29上说Android 9需要授予位置权限后把GPS打开才能获取Wi-Fi信息
-        if (isSDKAtLeastP()) {
-            // 如果未授权位置权限
-            if (ContextCompat.checkSelfPermission(thisActivity, Manifest.permission.ACCESS_COARSE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                // 判断是否需要授权说明
-                if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
-                        Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                    Toast.makeText(thisActivity, "ESPTouch配置需要此权限", Toast.LENGTH_LONG);
-                }
-                // 发起授权请求
-                String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION};
-                ActivityCompat.requestPermissions(thisActivity, permissions, REQUEST_PERMISSION);
-            } else {
-                registerBroadcastReceiver();
-            }
+        // if (isSDKAtLeastP()) {
+        //     // 如果未授权位置权限
+        //     if (ContextCompat.checkSelfPermission(thisActivity, Manifest.permission.ACCESS_COARSE_LOCATION)
+        //             != PackageManager.PERMISSION_GRANTED) {
+        //         // 判断是否需要授权说明
+        //         if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
+        //                 Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        //             Toast.makeText(thisActivity, "ESPTouch配置需要此权限", Toast.LENGTH_LONG);
+        //         }
+        //         // 发起授权请求
+        //         String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION};
+        //         ActivityCompat.requestPermissions(thisActivity, permissions, REQUEST_PERMISSION);
+        //     } else {
+        //         registerBroadcastReceiver();
+        //     }
 
-        } else {
-            registerBroadcastReceiver();
-        }
+        // } else {
+        //     registerBroadcastReceiver();
+        // }
+        registerBroadcastReceiver();
     }
 
     /* 请求授权后回调(上面的requestPermissions方法调用后，经用户操作反馈后会触发此函数) */
@@ -373,7 +374,8 @@ public class RNEsptouchModule extends ReactContextBaseJavaModule implements Life
                 if (firstResult.isSuc()) {
                     // 配置成功
                     Log.i("RNEsptouchModule","EspTouch success");
-                    respondToRN(200, "EspTouch succcess");
+                    // respondToRN(200, "EspTouch succcess");
+                    respondToRN(200, firstResult.getBssid()+"$"+firstResult.getInetAddress().getHostAddress());
                 } else {
                     // 配置失败
                     Log.i("RNEsptouchModule","EspTouch fail");
